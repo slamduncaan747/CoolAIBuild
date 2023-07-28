@@ -6,3 +6,4 @@ gtts
 openai
 gunicorn==19.7.1
 pygame
+ffmpeg
