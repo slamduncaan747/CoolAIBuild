@@ -1,0 +1,6 @@
+flask
+requests
+jsonify
+flask_cors
+gtts
+openai

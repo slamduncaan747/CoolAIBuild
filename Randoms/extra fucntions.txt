@@ -1,0 +1,61 @@
+///////PYTHON///////////
+@app.route('/sendString', methods=['POST'])
+def receive_string_from_frontend():
+    data = request.get_json()
+    message_from_frontend = data.get('message', '')
+    response = process_input(message_from_frontend)
+    # Process the message (In this example, just sending the same message back)
+    print("This is working")
+    response_data = {'response': response}
+    
+    return jsonify(response_data)
+
+def play_and_delete_audio(file_path):
+    pygame.mixer.init()
+    pygame.mixer.music.load(file_path)
+    pygame.mixer.music.play()
+
+    while pygame.mixer.music.get_busy():
+        pygame.time.Clock().tick(10)
+
+    pygame.mixer.music.stop()  # Stop the playback
+    pygame.mixer.quit()  # Clean up the mixer
+
+    # Delete the MP3 file after it's done playing
+    os.remove(file_path)
+    pygame.mixer.init()
+    pygame.mixer.music.load('output.mp3')
+    pygame.mixer.music.play()
+    while pygame.mixer.music.get_busy():
+        pygame.time.Clock().tick(10) 
+
+
+def record_audio():
+p = pyaudio.PyAudio()
+
+stream = p.open(format=FORMAT,
+                channels=CHANNELS,
+                rate=RATE,
+                input=True,
+                frames_per_buffer=CHUNK)
+
+print("Recording...")
+
+frames = []
+
+for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+    data = stream.read(CHUNK)
+    frames.append(data)
+
+print("Finished recording.")
+
+stream.stop_stream()
+stream.close()
+p.terminate()
+
+# Save the recorded audio to "input.wav"
+with wave.open("input.wav", 'wb') as wf:
+    wf.setnchannels(CHANNELS)
+    wf.setsampwidth(p.get_sample_size(FORMAT))
+    wf.setframerate(RATE)
+    wf.writeframes(b''.join(frames))
