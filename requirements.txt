@@ -4,3 +4,4 @@ jsonify
 flask_cors
 gtts
 openai
+gunicorn==19.7.1
