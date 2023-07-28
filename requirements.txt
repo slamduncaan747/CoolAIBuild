@@ -9,4 +9,3 @@ pygame
 ffmpeg
 pydub
 elevenlabs
-tempfile
